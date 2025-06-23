@@ -1,22 +1,27 @@
 $(document).ready(function () {
   let isResizing = false;
 
-  const minWidth = 500;  
-  const maxWidth = 1000;  
+  const $resizer = $('#resizer');
+  const $leftPane = $('#left-pane');
+  const $container = $('.flex'); 
+  const minPercent = 30;  
+  const maxPercent = 70;  
 
-  $('#resizer').on('mousedown', function (e) {
+  $resizer.on('mousedown', function (e) {
     isResizing = true;
     $('body').css('cursor', 'col-resize');
+    e.preventDefault();
   });
 
   $(document).on('mousemove', function (e) {
     if (!isResizing) return;
 
+    const containerOffset = $container.offset().left;
+    const containerWidth = $container.width();
+    let newPercent = ((e.clientX - containerOffset) / containerWidth) * 100;
 
-    let newWidth = e.clientX;
-    newWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
-
-    $('#left-pane').css('width', newWidth + 'px');
+    newPercent = Math.max(minPercent, Math.min(maxPercent, newPercent));
+    $leftPane.css('width', newPercent + '%');
   });
 
   $(document).on('mouseup', function () {
